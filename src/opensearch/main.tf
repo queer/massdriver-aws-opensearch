@@ -2,14 +2,14 @@ resource "random_string" "domain_name_first" {
   length  = 1
   lower   = true
   special = false
-  numeric = false
+  number  = false
   upper   = false
 }
 
 resource "random_string" "domain_name" {
   length           = 27
   lower            = true
-  numeric          = true
+  number           = true
   special          = true
   override_special = "-"
   upper            = false
@@ -18,7 +18,7 @@ resource "random_string" "domain_name" {
 resource "random_password" "master_user_password" {
   length      = 16
   lower       = true
-  numeric     = true
+  number      = true
   special     = true
   upper       = true
   min_lower   = 1

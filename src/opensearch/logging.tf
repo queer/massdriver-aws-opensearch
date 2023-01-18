@@ -15,7 +15,6 @@ locals {
 data "aws_iam_policy_document" "opensearch-cloudwatch_policy" {
   statement {
     actions = [
-      # TODO: too permissive, refine
       "logs:CreateLogStream",
       "logs:PutLogEvents",
       "logs:PutLogEventsBatch"

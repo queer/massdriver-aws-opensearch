@@ -17,22 +17,10 @@ _This bundle does not support Elasticsearch._ If you need Elasticsearch support 
 
 ### Caveats
 
-* Cold storage, Warm Nodes, and Cognito aren't supported at this time. Feel free to open an issue and we'll prioritize adding support.
+* Cold storage, Warm Nodes, and Cognito aren't supported at this time. Feel free to open an [issue](https://github.com/massdriver-cloud/aws-opensearch/issues) and we'll prioritize adding support.
 
 ## References
 
 * [OpenSearch Home Page](https://opensearch.org/)
 * [Developer Guide](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/what-is.html)
 * [Instance types](https://instances.vantage.sh/opensearch/)
-
-<!-- do we need these add'l links? -->
-
-* [Monitoring OpenSearch cluster metrics with Amazon CloudWatch](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/managedomains-cloudwatchmetrics.html)
-* [Operational best practices for Amazon OpenSearch Service](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/bp.html)
-* [Dedicated master nodes in Amazon OpenSearch Service](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/managedomains-dedicatedmasternodes.html)
-* [UltraWarm storage for Amazon OpenSearch Service](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/ultrawarm.html)
-* [Fine-grained access control in Amazon OpenSearch Service](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/fgac.html)
-* [Security in Amazon OpenSearch Service](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/security.html)
-* [Launching your Amazon OpenSearch Service domains within a VPC](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/vpc.html)
-* [Auto-Tune for Amazon OpenSearch Service](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/auto-tune.html)
-* [Sizing Amazon OpenSearch Service domains](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/sizing-domains.html)

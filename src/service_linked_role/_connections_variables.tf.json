@@ -1,0 +1,10 @@
+{
+    "variable": {
+        "aws_authentication": {
+            "type": "any"
+        },
+        "network": {
+            "type": "any"
+        }
+    }
+}

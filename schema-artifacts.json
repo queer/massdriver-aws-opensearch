@@ -1,0 +1,7 @@
+{
+    "$id": "https://schemas.massdriver.cloud/schemas/bundles/aws-opensearch/schema-artifacts.json",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "description": "Amazon OpenSearch is a managed service that allows you to set up, manage, and scale a search engine for your website or application. It is built on top of Apache Lucene and provides a simple and easy-to-use interface for adding search functionality to your application.",
+    "properties": {},
+    "title": "aws-opensearch"
+}

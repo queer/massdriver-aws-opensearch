@@ -1,0 +1,19 @@
+{
+    "cluster": {
+        "ui:order": [
+            "instance_type",
+            "instance_count"
+        ]
+    },
+    "opensearch": {
+        "ui:order": [
+            "version"
+        ]
+    },
+    "ui:order": [
+        "opensearch",
+        "cluster",
+        "networking",
+        "logging"
+    ]
+}

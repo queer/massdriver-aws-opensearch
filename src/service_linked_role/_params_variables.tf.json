@@ -1,0 +1,16 @@
+{
+    "variable": {
+        "cluster": {
+            "type": "any"
+        },
+        "logging": {
+            "type": "any"
+        },
+        "networking": {
+            "type": "any"
+        },
+        "opensearch": {
+            "type": "any"
+        }
+    }
+}

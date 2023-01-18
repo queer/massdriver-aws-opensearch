@@ -52,8 +52,70 @@ Form input parameters for configuring a bundle for deployment.
 <summary>View</summary>
 
 <!-- PARAMS:START -->
+## Properties
 
-**Params coming soon**
+- **`cluster`** *(object)*: Cluster Configuration.
+  - **`instance_count`** *(integer)*: Minimum: `1`. Default: `1`.
+  - **`instance_type`** *(string)*: Default: `r6gd.xlarge.search`.
+    - **One of**
+      - R3 Memory Optimized Large (2 vCPUs, 15 GiB RAM)
+      - I3 Storage Optimized Large (2 vCPUs, 15.25 GiB RAM)
+      - R6GD Memory Optimized (NVME SSD) Large (2 vCPUs, 16 GiB RAM)
+      - R3 Memory Optimized Extra Large (4 vCPUs, 30.5 GiB RAM)
+      - I3 Storage Optimized Extra Large (4 vCPUs, 30.5 GiB RAM)
+      - I2 Storage Optimized Extra Large (4 vCPUs, 30.5 GiB RAM)
+      - R6GD Memory Optimized (NVME SSD) Extra Large (4 vCPUs, 32 GiB RAM)
+      - R3 Memory Optimized Double Extra Large (8 vCPUs, 61 GiB RAM)
+      - I3 Storage Optimized Double Extra Large (8 vCPUs, 61 GiB RAM)
+      - I2 Storage Optimized Double Extra Large (8 vCPUs, 61 GiB RAM)
+      - R6GD Memory Optimized (NVME SSD) Double Extra Large (8 vCPUs, 64 GiB RAM)
+      - R3 Memory Optimized Quadruple Extra Large (16 vCPUs, 122 GiB RAM)
+      - I3 Storage Optimized Quadruple Extra Large (16 vCPUs, 122 GiB RAM)
+      - R6GD Memory Optimized (NVME SSD) Quadruple Extra Large (16 vCPUs, 128 GiB RAM)
+      - R3 Memory Optimized Eight Extra Large (32 vCPUs, 244 GiB RAM)
+      - I3 Storage Optimized Eight Extra Large (32 vCPUs, 244 GiB RAM)
+      - R6GD Memory Optimized (NVME SSD) Eight Extra Large (32 vCPUs, 256 GiB RAM)
+      - R6GD Memory Optimized (NVME SSD) 12xlarge Extra Large (48 vCPUs, 384 GiB RAM)
+      - I3 Storage Optimized 16xlarge Extra Large (64 vCPUs, 488 GiB RAM)
+      - R6GD Memory Optimized (NVME SSD) 16xlarge Extra Large (64 vCPUs, 512 GiB RAM)
+- **`logging`** *(object)*
+  - **`audit_logs`** *(integer)*: Must be one of: `[1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 2192, 2557, 2922, 3288, 3653]`. Default: `365`.
+  - **`es_application_logs`** *(integer)*: Must be one of: `[1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 2192, 2557, 2922, 3288, 3653]`. Default: `30`.
+  - **`index_slow_logs`** *(integer)*: Must be one of: `[1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 2192, 2557, 2922, 3288, 3653]`. Default: `30`.
+  - **`search_slow_logs`** *(integer)*: Must be one of: `[1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 2192, 2557, 2922, 3288, 3653]`. Default: `30`.
+- **`networking`** *(object)*
+  - **`subnet_type`** *(string)*: Deploy the database to internal subnets (cannot reach the internet) or private subnets (internet egress traffic allowed). Must be one of: `['internal', 'private']`. Default: `internal`.
+- **`opensearch`** *(object)*: OpenSearch Configuration.
+  - **`version`** *(string)*: Default: `OpenSearch_2.3`.
+    - **One of**
+      - 2.3
+      - 1.3
+      - 1.2
+      - 1.1
+      - 1.0
+## Examples
+
+  ```json
+  {
+      "__name": "Development",
+      "cluster": {
+          "instance_count": 1,
+          "instance_type": "r6gd.large.search"
+      },
+      "logging": {
+          "audit_logs": 1,
+          "es_application_logs": 1,
+          "index_slow_logs": 1,
+          "search_slow_logs": 1
+      },
+      "networking": {
+          "subnet_type": "internal"
+      },
+      "opensearch": {
+          "version": "OpenSearch_2.3"
+      }
+  }
+  ```
 
 <!-- PARAMS:END -->
 
@@ -67,8 +129,151 @@ Connections from other bundles that this bundle depends on.
 <summary>View</summary>
 
 <!-- CONNECTIONS:START -->
+## Properties
 
-**Connections coming soon**
+- **`aws_authentication`** *(object)*: . Cannot contain additional properties.
+  - **`data`** *(object)*
+    - **`arn`** *(string)*: Amazon Resource Name.
+
+      Examples:
+      ```json
+      "arn:aws:rds::ACCOUNT_NUMBER:db/prod"
+      ```
+
+      ```json
+      "arn:aws:ec2::ACCOUNT_NUMBER:vpc/vpc-foo"
+      ```
+
+    - **`external_id`** *(string)*: An external ID is a piece of data that can be passed to the AssumeRole API of the Security Token Service (STS). You can then use the external ID in the condition element in a role's trust policy, allowing the role to be assumed only when a certain value is present in the external ID.
+  - **`specs`** *(object)*
+    - **`aws`** *(object)*: .
+      - **`region`** *(string)*: AWS Region to provision in.
+
+        Examples:
+        ```json
+        "us-west-2"
+        ```
+
+- **`network`** *(object)*: . Cannot contain additional properties.
+  - **`data`** *(object)*
+    - **`infrastructure`** *(object)*
+      - **`arn`** *(string)*: Amazon Resource Name.
+
+        Examples:
+        ```json
+        "arn:aws:rds::ACCOUNT_NUMBER:db/prod"
+        ```
+
+        ```json
+        "arn:aws:ec2::ACCOUNT_NUMBER:vpc/vpc-foo"
+        ```
+
+      - **`cidr`** *(string)*
+
+        Examples:
+        ```json
+        "10.100.0.0/16"
+        ```
+
+        ```json
+        "192.24.12.0/22"
+        ```
+
+      - **`internal_subnets`** *(array)*
+        - **Items** *(object)*: AWS VCP Subnet.
+          - **`arn`** *(string)*: Amazon Resource Name.
+
+            Examples:
+            ```json
+            "arn:aws:rds::ACCOUNT_NUMBER:db/prod"
+            ```
+
+            ```json
+            "arn:aws:ec2::ACCOUNT_NUMBER:vpc/vpc-foo"
+            ```
+
+          - **`aws_zone`** *(string)*: AWS Availability Zone.
+
+            Examples:
+          - **`cidr`** *(string)*
+
+            Examples:
+            ```json
+            "10.100.0.0/16"
+            ```
+
+            ```json
+            "192.24.12.0/22"
+            ```
+
+
+          Examples:
+      - **`private_subnets`** *(array)*
+        - **Items** *(object)*: AWS VCP Subnet.
+          - **`arn`** *(string)*: Amazon Resource Name.
+
+            Examples:
+            ```json
+            "arn:aws:rds::ACCOUNT_NUMBER:db/prod"
+            ```
+
+            ```json
+            "arn:aws:ec2::ACCOUNT_NUMBER:vpc/vpc-foo"
+            ```
+
+          - **`aws_zone`** *(string)*: AWS Availability Zone.
+
+            Examples:
+          - **`cidr`** *(string)*
+
+            Examples:
+            ```json
+            "10.100.0.0/16"
+            ```
+
+            ```json
+            "192.24.12.0/22"
+            ```
+
+
+          Examples:
+      - **`public_subnets`** *(array)*
+        - **Items** *(object)*: AWS VCP Subnet.
+          - **`arn`** *(string)*: Amazon Resource Name.
+
+            Examples:
+            ```json
+            "arn:aws:rds::ACCOUNT_NUMBER:db/prod"
+            ```
+
+            ```json
+            "arn:aws:ec2::ACCOUNT_NUMBER:vpc/vpc-foo"
+            ```
+
+          - **`aws_zone`** *(string)*: AWS Availability Zone.
+
+            Examples:
+          - **`cidr`** *(string)*
+
+            Examples:
+            ```json
+            "10.100.0.0/16"
+            ```
+
+            ```json
+            "192.24.12.0/22"
+            ```
+
+
+          Examples:
+  - **`specs`** *(object)*
+    - **`aws`** *(object)*: .
+      - **`region`** *(string)*: AWS Region to provision in.
+
+        Examples:
+        ```json
+        "us-west-2"
+        ```
 
 <!-- CONNECTIONS:END -->
 
@@ -82,8 +287,7 @@ Resources created by this bundle that can be connected to other bundles.
 <summary>View</summary>
 
 <!-- ARTIFACTS:START -->
-
-**Artifacts coming soon**
+## Properties
 
 <!-- ARTIFACTS:END -->
 

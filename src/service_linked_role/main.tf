@@ -3,7 +3,7 @@
 
 # The linked service role can only be created once per account. This is conditionally created if it doesnt not exist.
 
-# Could this be solved with a custom_suffix? 
+# Could this be solved with a custom_suffix?
 #   No. Elasticsearch service and OpenSearch service both do _not_ support custom suffix.
 
 # This step is skipped during decommission to preserve the service role.

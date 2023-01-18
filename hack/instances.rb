@@ -25,10 +25,10 @@ sorted.each do |entry|
   instance_class = entry["API Name"].split(".").first
   next if $slow_instance_classes.include?(instance_class)
   next if $warm_instances_classes.include?(instance_class)
-  
+
   # TODO: remove EBS Only exclusion
   next if storage == "EBS Only"
-  
+
   options << {
     "title" => "#{name} (#{cpus}, #{memory} RAM)",
     "const" => entry["API Name"] # instance name

@@ -1,13 +1,32 @@
 {
     "cluster": {
+        "data_nodes": {
+            "ebs_options": {
+                "ui:order": [
+                    "volume_size_gib",
+                    "volume_type",
+                    "iops",
+                    "throughput"
+                ]
+            },
+            "ui:order": [
+                "instance_storage_type",
+                "instance_type",
+                "instance_count",
+                "ebs_options"
+            ]
+        },
         "ui:order": [
-            "instance_type",
-            "instance_count"
+            "master_nodes",
+            "data_nodes"
         ]
     },
-    "opensearch": {
+    "logging": {
         "ui:order": [
-            "version"
+            "index_slow_logs",
+            "search_slow_logs",
+            "es_application_logs",
+            "audit_logs"
         ]
     },
     "ui:order": [

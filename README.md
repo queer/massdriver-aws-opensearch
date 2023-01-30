@@ -15,7 +15,7 @@ Amazon OpenSearch is a managed service that allows you to set up, manage, and sc
 
 ## Design
 
-For detailed information, check out our [Operator Guide](operator.mdx) for this bundle.
+For detailed information, check out our [Operator Guide](operator.md) for this bundle.
 
 ## Usage
 
@@ -54,29 +54,14 @@ Form input parameters for configuring a bundle for deployment.
 ## Properties
 
 - **`cluster`** *(object)*: Cluster Configuration.
-  - **`instance_count`** *(integer)*: Minimum: `1`. Default: `1`.
-  - **`instance_type`** *(string)*: Default: `r6gd.xlarge.search`.
-    - **One of**
-      - R3 Memory Optimized Large (2 vCPUs, 15 GiB RAM)
-      - I3 Storage Optimized Large (2 vCPUs, 15.25 GiB RAM)
-      - R6GD Memory Optimized (NVME SSD) Large (2 vCPUs, 16 GiB RAM)
-      - R3 Memory Optimized Extra Large (4 vCPUs, 30.5 GiB RAM)
-      - I3 Storage Optimized Extra Large (4 vCPUs, 30.5 GiB RAM)
-      - I2 Storage Optimized Extra Large (4 vCPUs, 30.5 GiB RAM)
-      - R6GD Memory Optimized (NVME SSD) Extra Large (4 vCPUs, 32 GiB RAM)
-      - R3 Memory Optimized Double Extra Large (8 vCPUs, 61 GiB RAM)
-      - I3 Storage Optimized Double Extra Large (8 vCPUs, 61 GiB RAM)
-      - I2 Storage Optimized Double Extra Large (8 vCPUs, 61 GiB RAM)
-      - R6GD Memory Optimized (NVME SSD) Double Extra Large (8 vCPUs, 64 GiB RAM)
-      - R3 Memory Optimized Quadruple Extra Large (16 vCPUs, 122 GiB RAM)
-      - I3 Storage Optimized Quadruple Extra Large (16 vCPUs, 122 GiB RAM)
-      - R6GD Memory Optimized (NVME SSD) Quadruple Extra Large (16 vCPUs, 128 GiB RAM)
-      - R3 Memory Optimized Eight Extra Large (32 vCPUs, 244 GiB RAM)
-      - I3 Storage Optimized Eight Extra Large (32 vCPUs, 244 GiB RAM)
-      - R6GD Memory Optimized (NVME SSD) Eight Extra Large (32 vCPUs, 256 GiB RAM)
-      - R6GD Memory Optimized (NVME SSD) 12xlarge Extra Large (48 vCPUs, 384 GiB RAM)
-      - I3 Storage Optimized 16xlarge Extra Large (64 vCPUs, 488 GiB RAM)
-      - R6GD Memory Optimized (NVME SSD) 16xlarge Extra Large (64 vCPUs, 512 GiB RAM)
+  - **`data_nodes`** *(object)*
+    - **`instance_count`** *(integer)*: Number of instances in the cluster. Minimum: `1`. Maximum: `80`. Default: `1`.
+    - **`instance_storage_type`** *(string)*: Storage type for workloads. This will effect the available instances types. Default: `EBS`.
+      - **One of**
+        - EBS - Elastic Block Store
+        - SSD/NVMe - Non-Volatile Memory Express
+  - **`master_nodes`** *(object)*: Amazon OpenSearch Service uses dedicated master nodes to increase cluster stability. A dedicated master node performs cluster management tasks, but does not hold data or respond to data upload requests.
+    - **`enabled`** *(boolean)*: Enables 3 dedicated master nodes. Types are automatically selected based on your data node types. Default: `False`.
 - **`logging`** *(object)*
   - **`audit_logs`** *(integer)*: Must be one of: `[1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 2192, 2557, 2922, 3288, 3653]`. Default: `365`.
   - **`es_application_logs`** *(integer)*: Must be one of: `[1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 2192, 2557, 2922, 3288, 3653]`. Default: `30`.
@@ -98,14 +83,52 @@ Form input parameters for configuring a bundle for deployment.
   {
       "__name": "Development",
       "cluster": {
-          "instance_count": 1,
-          "instance_type": "r6gd.large.search"
+          "data_nodes": {
+              "ebs_options": {
+                  "volume_size_gib": 10,
+                  "volume_type": "gp2"
+              },
+              "instance_count": 1,
+              "instance_storage_type": "EBS",
+              "instance_type": "m6g.large.search"
+          },
+          "master_nodes": {
+              "enabled": false
+          }
       },
       "logging": {
           "audit_logs": 1,
           "es_application_logs": 1,
           "index_slow_logs": 1,
           "search_slow_logs": 1
+      },
+      "networking": {
+          "subnet_type": "internal"
+      },
+      "opensearch": {
+          "version": "OpenSearch_2.3"
+      }
+  }
+  ```
+
+  ```json
+  {
+      "__name": "Production",
+      "cluster": {
+          "data_nodes": {
+              "instance_count": 3,
+              "instance_storage_type": "SSD",
+              "instance_type": "r6gd.xlarge.search"
+          },
+          "master_nodes": {
+              "enabled": true
+          }
+      },
+      "logging": {
+          "audit_logs": 90,
+          "es_application_logs": 30,
+          "index_slow_logs": 30,
+          "search_slow_logs": 30
       },
       "networking": {
           "subnet_type": "internal"
@@ -287,6 +310,91 @@ Resources created by this bundle that can be connected to other bundles.
 
 <!-- ARTIFACTS:START -->
 ## Properties
+
+- **`authentication`** *(object)*: Authentication for OpenSearch. Cannot contain additional properties.
+  - **`data`** *(object)*: Cannot contain additional properties.
+    - **`authentication`** *(object)*: Master Username & Password Authentication.
+      - **`hostname`** *(string)*
+      - **`password`** *(string)*
+      - **`port`** *(integer)*: Port number. Minimum: `0`. Maximum: `65535`.
+      - **`username`** *(string)*
+    - **`infrastructure`** *(object)*: Cloud specific infrastructure details.
+      - **One of**
+        - AWS Infrastructure ARN*object*: Minimal AWS Infrastructure Config. Cannot contain additional properties.
+          - **`arn`** *(string)*: Amazon Resource Name.
+
+            Examples:
+            ```json
+            "arn:aws:rds::ACCOUNT_NUMBER:db/prod"
+            ```
+
+            ```json
+            "arn:aws:ec2::ACCOUNT_NUMBER:vpc/vpc-foo"
+            ```
+
+    - **`security`** *(object)*: IAM Security Policies.
+      - **Any of**
+        - AWS Security information*object*: Informs downstream services of network and/or IAM policies. Cannot contain additional properties.
+          - **`iam`** *(object)*: IAM Policies. Cannot contain additional properties.
+            - **`^[a-z-/]+$`** *(object)*
+              - **`policy_arn`** *(string)*: AWS IAM policy ARN.
+
+                Examples:
+                ```json
+                "arn:aws:rds::ACCOUNT_NUMBER:db/prod"
+                ```
+
+                ```json
+                "arn:aws:ec2::ACCOUNT_NUMBER:vpc/vpc-foo"
+                ```
+
+          - **`identity`** *(object)*: For instances where IAM policies must be attached to a role attached to an AWS resource, for instance AWS Eventbridge to Firehose, this attribute should be used to allow the downstream to attach it's policies (Firehose) directly to the IAM role created by the upstream (Eventbridge). It is important to remember that connections in massdriver are one way, this scheme perserves the dependency relationship while allowing bundles to control the lifecycles of resources under it's management. Cannot contain additional properties.
+            - **`role_arn`** *(string)*: ARN for this resources IAM Role.
+
+              Examples:
+              ```json
+              "arn:aws:rds::ACCOUNT_NUMBER:db/prod"
+              ```
+
+              ```json
+              "arn:aws:ec2::ACCOUNT_NUMBER:vpc/vpc-foo"
+              ```
+
+          - **`network`** *(object)*: AWS security group rules to inform downstream services of ports to open for communication. Cannot contain additional properties.
+            - **`^[a-z-]+$`** *(object)*
+              - **`arn`** *(string)*: Amazon Resource Name.
+
+                Examples:
+                ```json
+                "arn:aws:rds::ACCOUNT_NUMBER:db/prod"
+                ```
+
+                ```json
+                "arn:aws:ec2::ACCOUNT_NUMBER:vpc/vpc-foo"
+                ```
+
+              - **`port`** *(integer)*: Port number. Minimum: `0`. Maximum: `65535`.
+              - **`protocol`** *(string)*: Must be one of: `['tcp', 'udp']`.
+  - **`specs`** *(object)*: Cannot contain additional properties.
+    - **`aws`** *(object)*: .
+      - **`region`** *(string)*: AWS Region to provision in.
+
+        Examples:
+        ```json
+        "us-west-2"
+        ```
+
+    - **`opensearch`** *(object)*
+      - **`version`** *(string)*: Default: ``.
+
+        Examples:
+        ```json
+        "1.3"
+        ```
+
+        ```json
+        "2.0"
+        ```
 
 <!-- ARTIFACTS:END -->
 

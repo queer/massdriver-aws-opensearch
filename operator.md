@@ -31,26 +31,40 @@ Amazon OpenSearch Service makes it easy to upgrade your OpenSearch clusters to n
 
 * Leverage the power of AWS services: OpenSearch integrates with other AWS services, such as Amazon DynamoDB and Amazon S3, which can be leveraged to index and search data stored in DynamoDB tables or S3 buckets.
 
+Learn mote about [operational best practices for Amazon OpenSearch Service](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/bp.html).
+
 
 ### Design Decisions
 
-* Conditionally creates a service-linked role for OpenSearch. The role is retained on decommission since it is a global resource and may be in use by other OpenSearch clusters.
+* Conditionally creates a service-linked role for OpenSearch. The role is **retained** on decommission since it is a global resource and may be in use by other OpenSearch clusters.
 * Node-to-node encryption is enabled.
-* Custom KMS keys are created and retained after decommissioning.
+* Custom KMS keys are created and **retained** after decommissioning.
 * Encryption at rest is enabled.
-* HTTPS is enforced w/ TLS 1.2.
-* Require a VPC deployment.
 * Creates a logwatch group for each log type, KMS encrypted.
-* Advanced security is enabled.
+* HTTPS is enforced w/ TLS 1.2.
+* When Master Nodes are enabled following [best practices](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/managedomains-dedicatedmasternodes.html) 3 nodes will be selected. The instance types will be determined based on the data node type and count as documented [here](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/managedomains-dedicatedmasternodes.html).
+* [VPC-based deployment](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/vpc.html)
+* Advanced [security](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/security.html) is enabled.
+* [Auto-Tune](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/auto-tune.html) is enabled to improve cluster speed and stability, with `NO_ROLLBACK` on disable.
+* Only [current generation](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/supported-instance-types.html) types are supported.
+* [Zone Awareness](https://aws.amazon.com/premiumsupport/knowledge-center/opensearch-fault-tolerance/) is automatically turned on when the data node instance count > 1. 2 zones are used for an even number of instances, 3 zones for an odd number of instances.
+* A unique 28 character domain name is automatically created. Custom domains are on our [roadmap](https://github.com/massdriver-cloud/aws-opensearch/issues/5).
 
 ### Caveats
 
+When designing bundles, Massdrivers aims for the 80% use case. If any of the caveats below impact your ability to operate OpenSearch please feel free to open an [issue](https://github.com/massdriver-cloud/aws-opensearch/issues) and we'll prioritize adding support.
+
 1. _This bundle does not support Elasticsearch._ If you need Elasticsearch support you can request it [here](https://roadmap.massdriver.cloud/) or [create your own](https://docs.massdriver.cloud/bundles).
-2. Cold storage, Warm Nodes, and Cognito aren't supported at this time. Feel free to open an [issue](https://github.com/massdriver-cloud/aws-opensearch/issues) and we'll prioritize adding support.
+2. Cold storage, Warm Nodes, and Cognito aren't supported at this time, but are on our roadmap.
+3. No support for T3 Class instances as they frequently time out during provisioning. If you need T3 support, please contact us by clicking the chat icon on your sidebar.
+4. Instance count & type are marked immutable as the Terraform provider doesn't appear to support blue/green deploys. We are tracking this issue [here](https://github.com/massdriver-cloud/aws-opensearch/issues/12).
+5. Authentication is currently only supported using master user/password and [basic auth](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/fgac-walkthrough-basic.html). If you need another authentication type, please comment on this [issue](https://github.com/massdriver-cloud/aws-opensearch/issues/11) and we will prioritize.
+6. No support for previous generation volume storage (Provisioned IOPS).
 
-### References
+### Additional OpenSearch Resources
 
-* [OpenSearch Home Page](https://opensearch.org/)
+* [Home Page](https://opensearch.org/)
 * [Developer Guide](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/what-is.html)
 * [Instance types](https://instances.vantage.sh/opensearch/)
 * [Pricing](https://aws.amazon.com/opensearch-service/pricing/)
+* [Blue/Green configuration changes in Amazon OpenSearch Service](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/managedomains-configuration-changes.html)

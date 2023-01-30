@@ -31,7 +31,7 @@ Amazon OpenSearch Service makes it easy to upgrade your OpenSearch clusters to n
 
 * Leverage the power of AWS services: OpenSearch integrates with other AWS services, such as Amazon DynamoDB and Amazon S3, which can be leveraged to index and search data stored in DynamoDB tables or S3 buckets.
 
-Learn mote about [operational best practices for Amazon OpenSearch Service](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/bp.html).
+Learn mote about [operational best practices for Amazon OpenSearch Service](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/bp.html) or [sizing OpenSearch domains](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/sizing-domains.html).
 
 
 ### Design Decisions

@@ -135,6 +135,8 @@ params:
                       title: Instance Type
                       type: string
                       oneOf:
+                        - title: 2 vCPUs, 2 GiB ram, EBS Only (t3.small.search)
+                          const: t3.small.search
                         - title: 2 vCPUs, 4 GiB RAM, EBS Only (c6g.large.search)
                           const: c6g.large.search
                         - title: 2 vCPUs, 4 GiB RAM, EBS Only (c5.large.search)
